@@ -64,8 +64,8 @@ const UploadedStatementsList: React.FC<UploadedStatementsListProps> = ({ stateme
                         Processing
                       </div>
                     ) : hasFlags && (
-                      <div className="flex items-center text-red-600 bg-red-50 px-2 py-1 rounded-full text-xs whitespace-nowrap">
-                        <AlertTriangle className="h-3 w-3 mr-1" />
+                      <div className="flex items-center text-emerald-600 bg-emerald-50 px-2 py-1 rounded-full text-xs whitespace-nowrap">
+                        <CheckCircle className="h-3 w-3 mr-1" />
                         {statement.transactionCount} Transactions
                       </div>
                     )}
@@ -87,7 +87,6 @@ const UploadedStatementsList: React.FC<UploadedStatementsListProps> = ({ stateme
               <div className="flex items-center space-x-3 ml-11 sm:ml-0">
                 {statement.status === 'completed' && (
                   <>
-                    
                     <Button 
                       variant="outline" 
                       size="sm"
