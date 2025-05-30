@@ -58,13 +58,14 @@ const UploadedStatementsList: React.FC<UploadedStatementsListProps> = ({ stateme
                     <h4 className="font-medium text-gray-900 truncate max-w-[200px] sm:max-w-xs">
                       {statement.filename}
                     </h4>
+                    <br/>
                     {isProcessing ? (
                       <div className="flex items-center text-amber-600 bg-amber-50 px-2 py-1 rounded-full text-xs whitespace-nowrap">
                         <Clock className="h-3 w-3 mr-1 animate-pulse" />
                         Processing
                       </div>
                     ) : hasFlags && (
-                      <div className="flex w-full items-center text-emerald-600 bg-emerald-50 px-2 py-1 rounded-full text-xs whitespace-nowrap">
+                      <div className="flex  items-center text-emerald-600 bg-emerald-50 px-2 py-1 rounded-full text-xs whitespace-nowrap">
                         <CheckCircle className="h-3 w-3 mr-1" />
                         {statement.transactionCount} Transactions
                       </div>
