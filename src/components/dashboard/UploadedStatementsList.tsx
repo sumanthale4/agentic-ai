@@ -54,7 +54,7 @@ const UploadedStatementsList: React.FC<UploadedStatementsListProps> = ({ stateme
                 </div>
                 
                 <div className="min-w-0 flex-1">
-                  <div className="flex flex-wrap items-center gap-2 mb-2">
+                  <div className="flex flex-col items-center gap-2 mb-2">
                     <h4 className="font-medium text-gray-900 truncate max-w-[200px] sm:max-w-xs">
                       {statement.filename}
                     </h4>
@@ -65,7 +65,7 @@ const UploadedStatementsList: React.FC<UploadedStatementsListProps> = ({ stateme
                       </div>
                     ) : hasFlags && (
                       <div className="flex items-center text-emerald-600 bg-emerald-50 px-2 py-1 rounded-full text-xs whitespace-nowrap">
-                        <CheckCircle className="h-3 w-3 mr-1 animate-pulse" />
+                        <CheckCircle className="h-3 w-3 mr-1 " />
                         {statement.transactionCount} Transactions
                       </div>
                     )}
