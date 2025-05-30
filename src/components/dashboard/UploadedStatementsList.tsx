@@ -87,10 +87,7 @@ const UploadedStatementsList: React.FC<UploadedStatementsListProps> = ({ stateme
               <div className="flex items-center space-x-3 ml-11 sm:ml-0">
                 {statement.status === 'completed' && (
                   <>
-                    <div className="hidden group-hover:flex items-center text-emerald-600 bg-emerald-50 px-3 py-1.5 rounded-full text-sm animate-fadeIn whitespace-nowrap">
-                      <CheckCircle className="h-4 w-4 mr-1.5" />
-                      Processed
-                    </div>
+                    
                     <Button 
                       variant="outline" 
                       size="sm"
