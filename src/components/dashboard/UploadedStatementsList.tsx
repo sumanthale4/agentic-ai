@@ -54,7 +54,7 @@ const UploadedStatementsList: React.FC<UploadedStatementsListProps> = ({ stateme
                 </div>
                 
                 <div className="min-w-0 flex-1">
-                  <div className="flex flex-col justify-start gap-2 mb-2">
+                  <div className="flex flex-col  gap-2 mb-2">
                     <h4 className="font-medium text-gray-900 truncate max-w-[200px] sm:max-w-xs">
                       {statement.filename}
                     </h4>
