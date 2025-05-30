@@ -65,7 +65,7 @@ const UploadedStatementsList: React.FC<UploadedStatementsListProps> = ({ stateme
                       </div>
                     ) : hasFlags && (
                       <div className="flex items-center text-emerald-600 bg-emerald-50 px-2 py-1 rounded-full text-xs whitespace-nowrap">
-                        <CheckCircle className="h-3 w-3 mr-1" />
+                        <CheckCircle className="h-3 w-3 mr-1 animate-pulse" />
                         {statement.transactionCount} Transactions
                       </div>
                     )}
