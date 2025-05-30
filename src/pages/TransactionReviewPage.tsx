@@ -8,29 +8,36 @@ import {
   AlertTriangle,
   CheckCircle,
   Clock,
+  CreditCard,
+  ArrowUpDown,
+  ChevronDown,
 } from "lucide-react";
 
 const TransactionReviewPage: React.FC = () => {
-  const { transactions, setSelectedTransaction, selectedTransaction } =
-    useApp();
+  const { transactions, setSelectedTransaction, selectedTransaction } = useApp();
   const [searchTerm, setSearchTerm] = useState("");
-  const [statusFilter, setStatusFilter] = useState<"all" | "flagged" | "safe">(
-    "all"
-  );
+  const [statusFilter, setStatusFilter] = useState<"all" | "flagged" | "safe">("all");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
 
-  // Filter transactions
-  const filteredTransactions = transactions.filter((transaction) => {
-    const matchesSearch =
-      transaction.merchant.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      transaction.description.toLowerCase().includes(searchTerm.toLowerCase());
+  // Filter and sort transactions
+  const filteredTransactions = transactions
+    .filter((transaction) => {
+      const matchesSearch =
+        transaction.merchant.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        transaction.description.toLowerCase().includes(searchTerm.toLowerCase());
 
-    const matchesFilter =
-      statusFilter === "all" ||
-      (statusFilter === "flagged" && transaction.flagged) ||
-      (statusFilter === "safe" && !transaction.flagged);
+      const matchesFilter =
+        statusFilter === "all" ||
+        (statusFilter === "flagged" && transaction.flagged) ||
+        (statusFilter === "safe" && !transaction.flagged);
 
-    return matchesSearch && matchesFilter;
-  });
+      return matchesSearch && matchesFilter;
+    })
+    .sort((a, b) => {
+      const dateA = new Date(a.date).getTime();
+      const dateB = new Date(b.date).getTime();
+      return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
+    });
 
   const stats = {
     total: transactions.length,
@@ -41,22 +48,37 @@ const TransactionReviewPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">
-              Transaction Review
-            </h1>
-            <p className="text-gray-600 mt-2">
-              Review and manage your credit card transactions
+            <div className="flex items-center gap-3 mb-2">
+              <div className="p-2 bg-blue-100 rounded-lg">
+                <CreditCard className="h-5 w-5 text-blue-600" />
+              </div>
+              <h1 className="text-2xl font-bold text-gray-900">
+                Transaction Review
+              </h1>
+            </div>
+            <p className="text-gray-600">
+              Monitor and manage your credit card transactions
             </p>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
+              className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 bg-white rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors"
+            >
+              <ArrowUpDown className="h-4 w-4" />
+              {sortOrder === "asc" ? "Oldest First" : "Newest First"}
+            </button>
           </div>
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          <div className="bg-white rounded-xl p-4 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-500">Total</p>
@@ -70,7 +92,7 @@ const TransactionReviewPage: React.FC = () => {
             </div>
           </div>
 
-          <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
+          <div className="bg-white rounded-xl p-4 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-500">Flagged</p>
@@ -84,7 +106,7 @@ const TransactionReviewPage: React.FC = () => {
             </div>
           </div>
 
-          <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
+          <div className="bg-white rounded-xl p-4 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-500">Approved</p>
@@ -98,7 +120,7 @@ const TransactionReviewPage: React.FC = () => {
             </div>
           </div>
 
-          <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
+          <div className="bg-white rounded-xl p-4 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-500">Disputed</p>
@@ -114,19 +136,22 @@ const TransactionReviewPage: React.FC = () => {
         </div>
 
         {/* Filters and Search */}
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-8">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center">
-                <Filter className="h-5 w-5 text-gray-400 mr-2" />
-                <span className="text-sm font-medium text-gray-700">
-                  Filter by:
-                </span>
+        <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-4 mb-8">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="flex flex-wrap items-center gap-3">
+              <div className="relative">
+                <button
+                  className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+                >
+                  <Filter className="h-4 w-4" />
+                  Filter
+                  <ChevronDown className="h-4 w-4" />
+                </button>
               </div>
 
-              <div className="flex items-center space-x-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <button
-                  className={`px-4 py-2 text-sm rounded-xl transition-colors ${
+                  className={`px-3 py-2 text-sm rounded-lg transition-colors ${
                     statusFilter === "all"
                       ? "bg-blue-100 text-blue-700"
                       : "bg-gray-100 text-gray-700 hover:bg-gray-200"
@@ -136,7 +161,7 @@ const TransactionReviewPage: React.FC = () => {
                   All
                 </button>
                 <button
-                  className={`px-4 py-2 text-sm rounded-xl transition-colors ${
+                  className={`px-3 py-2 text-sm rounded-lg transition-colors ${
                     statusFilter === "flagged"
                       ? "bg-red-100 text-red-700"
                       : "bg-gray-100 text-gray-700 hover:bg-gray-200"
@@ -146,7 +171,7 @@ const TransactionReviewPage: React.FC = () => {
                   Flagged
                 </button>
                 <button
-                  className={`px-4 py-2 text-sm rounded-xl transition-colors ${
+                  className={`px-3 py-2 text-sm rounded-lg transition-colors ${
                     statusFilter === "safe"
                       ? "bg-emerald-100 text-emerald-700"
                       : "bg-gray-100 text-gray-700 hover:bg-gray-200"
@@ -158,14 +183,14 @@ const TransactionReviewPage: React.FC = () => {
               </div>
             </div>
 
-            <div className="relative">
+            <div className="relative flex-shrink-0 w-full md:w-64">
               <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
-                <Search className="h-5 w-5 text-gray-400" />
+                <Search className="h-4 w-4 text-gray-400" />
               </div>
               <input
                 type="text"
                 placeholder="Search transactions..."
-                className="w-full md:w-64 pl-10 pr-4 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full pl-10 pr-4 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
@@ -174,7 +199,7 @@ const TransactionReviewPage: React.FC = () => {
         </div>
 
         {/* Transaction Table */}
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+        <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
           <TransactionTable
             transactions={filteredTransactions}
             onSelectTransaction={setSelectedTransaction}
